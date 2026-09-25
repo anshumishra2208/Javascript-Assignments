@@ -1,20 +1,4 @@
-let todos = [
-    {
-        id : Date.now() + 1,
-        text : "Go to gym",
-        isCompleted : false
-    },
-    {
-        id : Date.now() + 2,
-        text : "Revision",
-        isCompleted : true
-    },
-    {
-        id : Date.now() + 3,
-        text : "Take classes",
-        isCompleted : false
-    }
-]
+let todos = JSON.parse(localStorage.getItem("todos")) || []
 
 let form = document.querySelector("#todo-form");
 let todoList = document.querySelector("#todo-list");
@@ -23,10 +7,10 @@ let btn = document.querySelector("#btn");
 let taskCount = document.querySelector("#taskCount");
 let completed = document.querySelector("#completed")
 
+
+let isEdit = null;
 form.addEventListener("submit",(e)=>{
     e.preventDefault();
-
-    let isEdit = null;
     if(input.value===""){
         return
     }
@@ -40,6 +24,8 @@ form.addEventListener("submit",(e)=>{
         }
         return todo;
     })
+    localStorage.setItem("todos",JSON.stringify(todos))
+    isEdit = null;
     renderTodo();
     }
 
@@ -50,6 +36,7 @@ form.addEventListener("submit",(e)=>{
         isCompleted : false
     }
     todos.push(newTodo);
+    localStorage.setItem("todos",JSON.stringify(todos))
     }
 
     renderTodo();
@@ -118,8 +105,10 @@ todoList.addEventListener("click",(e)=>{
                     isCompleted : !todo.isCompleted
                 }
             }
+            localStorage.setItem("todos",JSON.stringify(todos))
             return todo
         })
+        localStorage.setItem("todos",JSON.stringify(todos))
         renderTodo()
     }
 })
@@ -130,9 +119,8 @@ function deleteTodo(id){
             return todo
         }
     })
-
+    localStorage.setItem("todos",JSON.stringify(todos))
     renderTodo()
-    console.log(todos);
 }
 
 function editTodo(id){
@@ -145,15 +133,5 @@ function editTodo(id){
     input.value = currentTodo.text;
     btn.textContent = "Update";
 
-    // todos = todos.map((todo)=>{
-    //     if(todo.id===Number(id)){
-    //         return {
-    //             ...todo,
-    //             text : input.value
-    //         }
-    //     }
-    //     return todo;
-    // })
-    // renderTodo();
 }
 
